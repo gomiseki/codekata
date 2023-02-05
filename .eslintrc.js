@@ -21,6 +21,29 @@ module.exports = {
     'react',
     '@typescript-eslint',
   ],
+  settings: {
+    'import/resolver': {
+      typescript: {},
+    },
+  },
   rules: {
+    'linebreak-style': 0,
+    'react/jsx-props-no-spreading': 0,
+    'react/jsx-filename-extension': [
+      'warn',
+      {
+        extensions: [
+          '.tsx',
+        ],
+      },
+    ],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
   },
 };
