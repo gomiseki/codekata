@@ -29,6 +29,14 @@ module.exports = {
   rules: {
     'linebreak-style': 0,
     'react/jsx-props-no-spreading': 0,
+    'react/no-unknown-property': [
+      2,
+      {
+        ignore: [
+          'jsx',
+        ],
+      },
+    ],
     'react/jsx-filename-extension': [
       'warn',
       {
