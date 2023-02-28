@@ -29,6 +29,8 @@ module.exports = {
   rules: {
     'linebreak-style': 0,
     'react/jsx-props-no-spreading': 0,
+    'import/no-extraneous-dependencies': 0,
+    'react/function-component-definition': 0,
     'react/no-unknown-property': [
       2,
       {
