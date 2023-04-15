@@ -1,10 +1,14 @@
 import React from 'react';
 import '../styles/globals.css';
+import { useRouter } from 'next/router';
 import type { AppProps } from 'next/app';
 import Image from 'next/image';
 import Link from 'next/link';
+import Head from 'next/head';
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  console.log(router);
   return (
     <>
       <style jsx>
@@ -39,6 +43,11 @@ export default function App({ Component, pageProps }: AppProps) {
           }
         `}
       </style>
+      <Head>
+        <title>{Number(router.pathname.split('/').pop()) || 'Next-Codekata'}</title>
+        <meta name="description" content="Next-codkata" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className="container">
         <Link href="/">
           <div className="home-icon">

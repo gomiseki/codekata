@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { Titlemap } from '@/consts';
 
 export default function Nav({ posts }:{posts:string[]}) {
   return (
@@ -31,7 +32,7 @@ export default function Nav({ posts }:{posts:string[]}) {
       {
         posts.map((post) => (
           <div key={post}>
-            <Link href={`/posts/${post.split('.')[0]}`}>{post.split('.')[0]}</Link>
+            <Link href={`/posts/${post}`}>{Titlemap[Number(post)]}</Link>
           </div>
         ))
       }

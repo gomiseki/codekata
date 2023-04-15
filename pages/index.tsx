@@ -1,5 +1,4 @@
 import React from 'react';
-import Head from 'next/head';
 import Nav from '@/components/Nav';
 import { readdirSync } from 'fs';
 
@@ -44,11 +43,6 @@ export default function Home({ posts }:{posts:string[]}) {
           }
         `}
       </style>
-      <Head>
-        <title>Next-codkata</title>
-        <meta name="description" content="Next-codkata" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <main>
         <h1>
           {'Gomi의 NextJS Code Kata\n(그 카타 아님)'}
@@ -65,7 +59,6 @@ export async function getStaticProps() {
   // Instead of fetching your `/api` route you can call the same
   // function directly in `getStaticProps`
   const posts = readdirSync('./pages/posts');
-
   // Props returned will be passed to the page component
   return { props: { posts } };
 }
