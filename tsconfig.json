@@ -28,6 +28,9 @@
       ],
       "@/consts/*": [
         "consts/*"
+      ],
+      "@/contents/*": [
+        "contents/*"
       ]
     }
   },
@@ -35,7 +38,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "components/markdownViewer.tsx", "components/mdxViewer/codeBlock.tsx"  ],
   "exclude": [
     "node_modules"
   ],

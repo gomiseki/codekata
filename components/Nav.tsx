@@ -30,11 +30,14 @@ export default function Nav({ posts }:{posts:string[]}) {
         `}
       </style>
       {
-        posts.map((post) => (
-          <div key={post}>
-            <Link href={`/posts/${post}`}>{Titlemap[Number(post)]}</Link>
-          </div>
-        ))
+        posts.map((post) => {
+          const title = Titlemap[Number(post)];
+          return (
+            <div key={post}>
+              <Link href={`/posts/${post}`}>{title}</Link>
+            </div>
+          );
+        })
       }
     </>
   );
