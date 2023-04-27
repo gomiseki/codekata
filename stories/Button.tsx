@@ -27,7 +27,8 @@ interface ButtonProps {
 /**
  * Primary UI component for user interaction
  */
-export function Button({
+
+export default function Button({
   primary = false,
   size = 'medium',
   backgroundColor,
@@ -46,3 +47,10 @@ export function Button({
     </button>
   );
 }
+
+Button.defaultProps = {
+  primary: false,
+  size: 'medium',
+  backgroundColor: 'none',
+  onClick: () => {},
+};

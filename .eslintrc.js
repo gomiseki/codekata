@@ -27,6 +27,8 @@ module.exports = {
     },
   },
   rules: {
+    'no-unused-vars': 'off',
+    'no-shadow': 'off',
     'linebreak-style': 0,
     'react/jsx-props-no-spreading': 0,
     'import/no-extraneous-dependencies': 0,
