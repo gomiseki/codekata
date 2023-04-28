@@ -13,6 +13,10 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <style jsx>
         {`
+          main {
+            animation: fadein 2s;
+            max-height: 90%;
+          }
           .container {
             position: relative;
             width: 100vw;
@@ -58,7 +62,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <video autoPlay muted loop>
           <source src="/leesin.webm" type="video/webm" />
         </video>
-        <Component {...pageProps} />
+        <main>
+          <Component {...pageProps} />
+        </main>
       </div>
     </>
   );

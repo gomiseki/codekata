@@ -1,5 +1,5 @@
 import React from 'react';
-import Nav from '@/components/Nav';
+import Nav from '@/components/nav';
 import { readdirSync } from 'fs';
 
 export default function Home({ posts }:{posts:string[]}) {
@@ -7,9 +7,6 @@ export default function Home({ posts }:{posts:string[]}) {
     <>
       <style jsx>
         {`  
-          main{
-            animation: fadein 2s;
-          }
           h1 {
             display: flex;
             justify-content: center;
@@ -43,14 +40,14 @@ export default function Home({ posts }:{posts:string[]}) {
           }
         `}
       </style>
-      <main>
+      <>
         <h1>
           {'Gomi의 NextJS Code Kata\n(그 카타 아님)'}
         </h1>
         <div className="nav-container">
           <Nav posts={posts} />
         </div>
-      </main>
+      </>
     </>
   );
 }
