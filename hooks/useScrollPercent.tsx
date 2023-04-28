@@ -27,6 +27,6 @@ export default function useScrollPercent<T extends HTMLElement>() {
         window.removeEventListener('scroll', () => { scrollHandler(window.document.documentElement); });
       }
     };
-  }, []);
+  }, [scrollHandler]);
   return { scrollPer, domRef };
 }
