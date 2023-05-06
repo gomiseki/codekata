@@ -1,17 +1,17 @@
+import useScrollPercent from '@/hooks/useScrollPercent';
 import React from 'react';
 
-interface ProgressBarProps{
-  per: number;
+interface newProgressBarProps{
   style?: React.CSSProperties;
   refactored?: boolean;
   [key: string]: any;
 }
 
-export default function ProgressBar({
-  per, style, refactored, ...rest
-}:ProgressBarProps) {
+export default function InnerStateProgressBar({ style, refactored, ...rest }:newProgressBarProps) {
+  const { scrollPer, domRef } = useScrollPercent<HTMLDivElement>();
+
   const progressBarOrigin:React.CSSProperties = {
-    width: `${per}%`,
+    width: `${scrollPer}%`,
     backgroundColor: 'red',
     height: '5px',
   };
@@ -20,7 +20,7 @@ export default function ProgressBar({
     width: '100%',
     backgroundColor: 'red',
     height: '5px',
-    transform: `scaleX(${per / 100})`,
+    transform: `scaleX(${scrollPer / 100})`,
     transformOrigin: 'center left',
   };
   return (
@@ -39,8 +39,8 @@ export default function ProgressBar({
           }
         `}
       </style>
-      <div className="container" style={{ ...style }} {...rest}>
-        {refactored ? 'refactored ProgressBar' : 'ProgressBar'}
+      <div className="container" ref={domRef} style={{ ...style }} {...rest}>
+        {refactored ? 'refactored new ProgressBar' : 'new ProgressBar'}
         <div
           style={refactored ? progressBarRefactor : progressBarOrigin}
         />
@@ -49,7 +49,7 @@ export default function ProgressBar({
   );
 }
 
-ProgressBar.defaultProps = {
+InnerStateProgressBar.defaultProps = {
   style: {},
   refactored: false,
 };

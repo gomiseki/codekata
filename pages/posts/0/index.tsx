@@ -1,10 +1,9 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
 import MDXLayout from '@/components/mdxViewer';
-import ProgressBar from '@/components/progressBar';
 import Content from '@/contents/progressbar.mdx';
 import useScrollPercent from '@/hooks/useScrollPercent';
-import NewProgressBar from '@/components/newProgressBar';
+import { ProgressBar, InnerStateProgressBar } from '@/components/progressBar';
 
 function DP({ refactor }:{refactor:boolean}) {
   const { scrollPer, domRef } = useScrollPercent<HTMLDivElement>();
@@ -21,7 +20,7 @@ function DP({ refactor }:{refactor:boolean}) {
 function IP({ refactor }:{refactor:boolean}) {
   return (
     <>
-      <NewProgressBar refactored={refactor} style={{ position: 'sticky', top: '0', backgroundColor: 'white' }} />
+      <InnerStateProgressBar refactored={refactor} style={{ position: 'sticky', top: '0', backgroundColor: 'white' }} />
       <MDXLayout>
         <Content />
       </MDXLayout>
@@ -46,10 +45,15 @@ export default () => {
           height: 100%;
         }
         .container::-webkit-scrollbar {
-            width: 5px;
-            }
+          width: 5px;
+        }
         .container::-webkit-scrollbar-thumb {
-            background-color: gray;
+          background-color: gray;
+        }
+        button {
+          display: block;
+          width: 100%;
+          margin: 5px 0;
         }
   `}
       </style>
@@ -62,7 +66,7 @@ export default () => {
           : refactor === 1 ? <DP refactor />
             : refactor === 2 ? <IP refactor={false} />
               : refactor === 3 ? <IP refactor />
-                : null }
+                : null}
       </div>
     </>
   );
