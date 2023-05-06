@@ -3,7 +3,7 @@ import {
 } from 'react';
 
 export default function useScrollPercent<T extends HTMLElement>() {
-  const domRef = useRef<T>(null);
+  const domRef = useRef<T|null>(null);
   const [scrollPer, setScrollPer] = useState(0);
 
   const scrollHandler = useCallback((dom:HTMLElement) => {
