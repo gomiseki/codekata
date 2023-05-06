@@ -4,3 +4,4 @@
 echo "허스키 실행..."
 npm run lint
 npm test
+npm run build
