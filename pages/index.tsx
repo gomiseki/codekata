@@ -24,7 +24,6 @@ export default function Home({ posts }:{posts:string[]}) {
             overflow-x: hidden;
             box-sizing: border-box;
             height: 40vh;
-            width: 80vw;
             margin: auto;
           }
           @media (max-width:767px){

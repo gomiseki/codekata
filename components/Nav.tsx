@@ -24,7 +24,7 @@ export default function Nav({ posts }:{posts:string[]}) {
           }
           @media (max-width:767px){
             div{
-              width: 90%;
+              width: 100%;
             }
           }
         `}

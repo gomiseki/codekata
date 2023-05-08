@@ -16,6 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
           main {
             animation: fadein 2s;
             max-height: 90%;
+            max-width: 60%;
           }
           .container {
             position: relative;
@@ -29,7 +30,8 @@ export default function App({ Component, pageProps }: AppProps) {
             align-items: center;
           }
           .home-icon{
-            position: absolute;
+            z-index: 9999;
+            position: fixed;
             top: 30px;
             left: 30px;
             animation: fadein 2s;
@@ -46,6 +48,17 @@ export default function App({ Component, pageProps }: AppProps) {
               width: 100%;
               object-fit: cover; // background-size: cover 와 비슷함. (HTML 요소 or 비디오와 작동)
           }
+          @media (max-width:767px){
+              main {
+              max-width: 90%;
+            }
+            .home-icon{
+              top: auto;
+              left: auto;
+              bottom: 30px;
+              right: 30px;
+            }
+          }
         `}
       </style>
       <Head>
@@ -54,11 +67,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="container">
-        <Link href="/">
-          <div className="home-icon">
+        <div className="home-icon">
+          <Link href="/">
             <Image src="/kata.webp" alt="katarina" width="100" height="100" />
-          </div>
-        </Link>
+          </Link>
+        </div>
         <video autoPlay muted loop>
           <source src="/leesin.webm" type="video/webm" />
         </video>

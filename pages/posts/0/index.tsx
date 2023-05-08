@@ -43,6 +43,7 @@ export default () => {
           position: relative;
           overflow: auto;
           height: 100%;
+          padding: 0 5px;
         }
         .container::-webkit-scrollbar {
           width: 5px;
