@@ -26,11 +26,6 @@ export default function Home({ posts }:{posts:string[]}) {
             height: 40vh;
             margin: auto;
           }
-          @media (max-width:767px){
-            .nav-container{
-              width: 95vw;
-            }
-          }
           .nav-container::-webkit-scrollbar {
             width: 5px;
             }
