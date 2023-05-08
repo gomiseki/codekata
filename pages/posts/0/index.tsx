@@ -58,10 +58,10 @@ export default () => {
   `}
       </style>
       <div className="container">
-        <button type="button" onClick={() => clickHandler(0)}>drilling props</button>
-        <button type="button" onClick={() => clickHandler(1)}>drilling props + refactored CSS</button>
-        <button type="button" onClick={() => clickHandler(2)}>inner props</button>
-        <button type="button" onClick={() => clickHandler(3)}>inner props + refactored CSS</button>
+        <button type="button" onClick={() => clickHandler(0)}>props drilling</button>
+        <button type="button" onClick={() => clickHandler(1)}>props drilling + refactored CSS</button>
+        <button type="button" onClick={() => clickHandler(2)}>colocated state</button>
+        <button type="button" onClick={() => clickHandler(3)}>colocated state + refactored CSS</button>
         {refactor === 0 ? <DP refactor={false} />
           : refactor === 1 ? <DP refactor />
             : refactor === 2 ? <IP refactor={false} />
