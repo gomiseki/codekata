@@ -2,143 +2,165 @@ import React from 'react';
 
 # Progressbar 개선하기
 
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
+**한 동안 인기글에 있었던 progressbar 개선하기 [포스팅](https://velog.io/@bokdol11859/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81%EC%9D%84-%ED%86%B5%ED%95%B4-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%B5%9C%EC%A0%81%ED%99%94%ED%95%98%EA%B8%B0-CSS-%EC%86%8D%EC%84%B1%EC%9D%84-%ED%86%B5%ED%95%B4-%EB%9A%9D%EB%9A%9D-%EB%81%8A%EA%B8%B0%EB%8A%94-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98-%EA%B0%9C%EC%84%A0)을 보고 
+직접 progressbar 구현도 해볼겸 실험해보았다.**
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
+## 1. useScrollPercent
+<br />
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
+범용성 있는 스크롤 훅을 목표로 작성했다.
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
+```tsx
+import {
+  useState, useEffect, useRef, useCallback,
+} from 'react';
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
+export default function useScrollPercent<T extends HTMLElement>() {
+  const domRef = useRef<T|null>(null);
+  const [scrollPer, setScrollPer] = useState(0);
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
+  const scrollHandler = useCallback((dom:HTMLElement) => {
+    const { scrollTop, scrollHeight, clientHeight } = dom;
+    const progressHeight = scrollHeight - clientHeight;
+    const progressWidth = (scrollTop / progressHeight) * 100;
+    setScrollPer(progressWidth);
+  }, []);
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
+  useEffect(() => {
+    const ref = domRef.current?.parentElement;
+    if (ref) {
+      ref.addEventListener('scroll', () => { scrollHandler(ref); });
+    } else {
+      window.addEventListener('scroll', () => {
+        scrollHandler(window.document.documentElement); 
+      });
+    }
+    return () => {
+      if (ref) {
+        ref.removeEventListener('scroll', () => { scrollHandler(ref); });
+      } else {
+        window.removeEventListener('scroll', () => { 
+          scrollHandler(window.document.documentElement); 
+        });
+      }
+    };
+  }, [scrollHandler]);
+  return { scrollPer, domRef };
+}
 
-);
 ```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
+코드는 progressbar 컴포넌트 내부에 작성되는 것을 전제로 작성했다.
+progressbar 컴포넌트의 부모요소에 이벤트가 발생할 때 마다 몇 퍼센트의 스크롤인지 업데이트 해준다.
+특히 useEffect 코드 내 EventListener를 보면 parentElement에 리스너를 적용하고 있는데,
+이는 progressbar 컴포넌트 내부에 훅이 선언되는 것을 강제하기 위함이며 그 이유는 후술하려한다.
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
+<br />
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
+## 2. state colocation
+<br />
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
-      <Content />
-    </MDXLayout>
-  </div>
+만약 useScrollPercent 훅이 부모 Element에 이벤트 리스너를 달지 않으면 어떻게 될까?
+훅이 선언되는 컴포넌트는 필수적으로 progressbar와 스크롤이 발생하는 컨테이너를 모두 담고있어야 한다.
 
-);
-```
-```jsx
-export default () => (
-  <div style={{ padding: '20px' }}>
-    <MDXLayout>
+``` tsx
+function BadCase() {
+  const { scrollPer, domRef } = useScrollPercent<HTMLDivElement>();
+  return (
+    <Container ref={domRef}>
+      <ProgressBar width={scrollPer}/>
       <Content />
-    </MDXLayout>
-  </div>
-
-);
+    </Container>
+  );
+}
 ```
+기본적으로 props drilling이 발생할 때 고려해야 하는 문제점이다.
+이런 코드의 문제점은 스크롤이 발생할 때 마다 컨테이너가 새로 렌더링 된다는 것이다. 
+훅의 선언부를 ProgressBar 내부로 옮기면 스크롤이 발생해도 ProgressBar 컴포넌트만 새로 렌더링된다.
+parentElement에 리스너를 적용한다면, ProgressBar 컴포넌트 내에서도 Container를 역으로 추적할 수 있다.
+
+**이렇듯 state 선언은 최대한 관련성이 높은 컴포넌트 내에서하라는 걸 state colocation 이라 한다고**~
+
+<br />
+
+
+## 3. CSS 속성을 통한 개선
+<br />
+
+브라우저 렌더링은 다음 과정을 따른다
+1. HTML 구문을 파싱하고 DOM/CSSOM 트리 구성
+2. 트리를 합성해 Render Tree 구성
+3. Layout 배치
+4. 실제 픽셀에 대해 Paint
+5. Paint가 끝난 레이어들을 Composite
+
+width 속성이 스크롤에 따라 변화하면 레이아웃 부터 재배치된다. 3, 4, 5 연산이 다시 발생한다는 것.
+하지만 transform 속성을 활용하면 5번 연산만 다시 발생해 연산량을 줄일 수 있는 듯 하다.
+
+```tsx
+export default function InnerStateProgressBar(
+  { refactored, ...rest }
+  :{ refactored:boolean }
+) {
+  const { scrollPer, domRef } = useScrollPercent<HTMLDivElement>();
+
+  const progressBarOrigin:React.CSSProperties = {
+    width: `${scrollPer}%`,
+    backgroundColor: 'red',
+    height: '5px',
+  };
+
+  const progressBarRefactor:React.CSSProperties = {
+    width: '100%',
+    backgroundColor: 'red',
+    height: '5px',
+    transform: `scaleX(${scrollPer / 100})`,
+    transformOrigin: 'center left',
+  };
+  return (
+    <>
+      <div ref={domRef} style={{ ...style }} {...rest}>
+        {refactored ? 'refactored ProgressBar' : 'ProgressBar'}
+        <div
+          style={refactored ? progressBarRefactor : progressBarOrigin}
+        />
+      </div>
+    </>
+  );
+}
+```
+대충 이런식의 컴포넌트를 구성하고 이제 진짜 성능이 개선되는지 실험해보았다.
+
+<br />
+
+## 4. 성능 테스트
+<br />
+
+포스팅에는 제대로 설명이 안되어있던 것인데, 숨쉬듯 당연한 것들이어서(?) 일 수도 있을 것이다.
+
+우선 처음에 실험용 컴포넌트를 구성하고 첫 테스트를 해봤을 때 몹시 당황했다.
+그냥 아무런 차이도 없어서이다. 
+
+**도대체 어디서 버벅거림을 느낄 수 있는거지?**
+
+![](https://velog.velcdn.com/images/gomiseki/post/7701f5d5-bbc2-4cf8-9b47-921d5b66981c/image.png)
+
+다시 포스팅을 천천히 보면서 테스트 환경의 차이를 보려고 했을 때 눈에 띈것은 CPU 쓰로틀링을 할 수 있는 저 부분이었다. 모바일과 데스크톱의 가장 큰 차이는 저 CPU 성능에서 오기에, 포스팅 처럼 모바일 퍼스트 페이지를 구상하고 있다면, 필수적으로 설정하는 듯 하다.
+
+![](https://velog.velcdn.com/images/gomiseki/post/abdca116-6ee5-4fe4-8844-bea3176deaba/image.png)
+
+CPU쓰로틀링을 x6으로 맞추고 네 가지 상황에 따른 성능 테스트를 해보았다. 
+>
+1. state colocation이 이뤄지지 않고 width를 조정
+2. state colocation이 이뤄지지 않고 transform을 조정
+3. state colocation을 적용하고 width를 조정
+4. state colocation을 적용하고 transform을 조정
+
+성능은 1234 순으로 좋아졌다.
+state colocation이 제대로 이뤄지지 않았을 때 콘텐츠 리렌더링의 대가는 컸다.
+그 다음으로 CSS 속성을 조정했을 때도 연산량의 감소를 직접 확인할 수 있었다.
+
+![](https://velog.velcdn.com/images/gomiseki/post/80011fef-fe4a-4e8e-a9d7-82dbede31d08/image.png)
+
+React Dev Tools가 있다면 다음 설정으로 스크롤에 따른 리렌더링을 확인할 수도 있다.
